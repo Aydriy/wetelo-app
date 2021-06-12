@@ -9,7 +9,10 @@
 body {
   background: #f0f0f0;
 }
-
+#root {
+  position: relative;
+  min-height: 100vh;
+}
 code {
   font-family: source-code-pro, Menlo, Monaco, Consolas, "Courier New",
     monospace;

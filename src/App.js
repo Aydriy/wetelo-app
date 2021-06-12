@@ -105,38 +105,43 @@ function App() {
     );
   };
   return (
-    <div className="App">
-      <Hero />
+    <>
+      <div className="App">
+        <Hero />
 
-      {loading ? (
-        <div className={classes.root}>
-          <CircularProgress />
-        </div>
-      ) : loading === null ? (
-        <h1>Не знайдено рейсів</h1>
-      ) : (
-        <section className="main">
-          <SearchBar
-            date={date}
-            allDatas={allDatas}
-            setCurrentData={setCurrentData}
-            departure={departure}
-            arrival={arrival}
-            setCurrentDataName={setCurrentDataName}
-            currentValue={currentValue}
-            setCurrentValue={setCurrentValue}
-            departureLength={departureLength}
-          />
-          <DataElement />
+        {loading ? (
+          <div className={classes.root}>
+            <CircularProgress />
+          </div>
+        ) : loading === null ? (
+          <h1>Не знайдено рейсів</h1>
+        ) : (
+          <section className="main">
+            <SearchBar
+              date={date}
+              allDatas={allDatas}
+              setCurrentData={setCurrentData}
+              departure={departure}
+              arrival={arrival}
+              setCurrentDataName={setCurrentDataName}
+              currentValue={currentValue}
+              setCurrentValue={setCurrentValue}
+              departureLength={departureLength}
+            />
+            <DataElement />
 
-          <Main
-            arrival={arrival}
-            сurrentData={сurrentData}
-            сurrentDataName={сurrentDataName}
-          />
-        </section>
-      )}
-    </div>
+            <Main
+              arrival={arrival}
+              сurrentData={сurrentData}
+              сurrentDataName={сurrentDataName}
+            />
+          </section>
+        )}
+      </div>
+      <footer>
+        <span>Copyright © 2021</span>
+      </footer>
+    </>
   );
 }
 
