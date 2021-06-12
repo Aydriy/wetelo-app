@@ -1,0 +1,122 @@
+.main {
+  padding: 0 20px;
+  margin: auto;
+  max-width: 1120px;
+
+  .search-input {
+    width: 100%;
+    &__input-container {
+      position: relative;
+      .search-icon {
+        padding: 0px 25px;
+        height: 100%;
+        position: absolute;
+        pointer-events: none;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        &::after {
+          content: "";
+          border-right: 1px solid #f7f7f7;
+          height: 42px;
+          border-radius: 1px;
+        }
+      }
+      input {
+        border-radius: 4px;
+        border: none;
+        outline: none;
+        width: calc(100% - 85px);
+        padding: 25px 165px 25px 90px;
+        font-size: 18px;
+        transition: 0.2s;
+        &:hover {
+          transition: 0.2s;
+          background-color: #f7f7f7;
+        }
+        &:focus {
+          transition: 0.2s;
+          background-color: #f7f7f7;
+        }
+        &::placeholder {
+          color: #a8a8a8;
+        }
+        &:disabled {
+          background-color: #ffffff;
+          opacity: 0.9;
+        }
+      }
+      svg {
+        opacity: 0.3;
+        padding-right: 20px;
+      }
+    }
+    &__btn {
+      width: 175px;
+      height: 46px;
+      background: #2d9cdb;
+      border-radius: 2px;
+      font-size: 18px;
+      margin: 12px;
+    }
+  }
+  .tab-wrapper {
+    box-shadow: none;
+    background-color: inherit;
+
+    border-bottom: 1px solid rgba(255, 255, 255, 0.6);
+  }
+  .tab-container {
+    max-width: 320px;
+    .PrivateTabIndicator-colorPrimary-8 {
+      background-color: #2d9cdb;
+    }
+    .tab {
+      color: rgba(0, 0, 0, 1);
+      &:first-child {
+        svg {
+          transform: rotate(45deg);
+        }
+      }
+      &:last-child {
+        svg {
+          transform: rotate(135deg);
+        }
+      }
+      span {
+        flex-direction: row;
+
+        svg {
+          color: rgba(0, 0, 0, 0.4);
+          padding: 5px;
+        }
+      }
+    }
+  }
+  .table-container {
+    .MuiPaper-elevation1 {
+      box-shadow: none;
+    }
+  }
+  .test {
+    position: absolute;
+    top: 0;
+    background-color: red;
+    color: red;
+    z-index: 1000;
+  }
+  .data-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+    margin: 0 auto 40px auto;
+    max-width: 250px;
+    .red-border {
+      color: rgba(255, 81, 0, 0.836);
+      background: rgb(67, 79, 177);
+      box-shadow: inset 0 1px 1px rgba(255, 168, 168, 0.164),
+        0 0 8px rgba(255, 0, 0, 0.322);
+    }
+  }
+}
