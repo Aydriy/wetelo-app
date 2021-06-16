@@ -22,7 +22,7 @@ function App() {
   const [currentValue, setCurrentValue] = useState(null);
   const [сurrentData, setCurrentData] = useState(null);
 
-  const date = startDate.toLocaleDateString();
+  const date = startDate.toISOString().split("T")[0];
 
   useEffect(() => {
     async function fetchDataList() {
@@ -49,6 +49,7 @@ function App() {
   // console.log(`сurrentData`, сurrentData);
   // console.log(`сurrentDataName`, сurrentDataName);
   // console.log(`startDate`, date);
+  console.log(`currentValue`, currentValue);
 
   const useStyles = makeStyles((theme) => ({
     root: {
