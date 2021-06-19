@@ -1,4 +1,5 @@
-import React, { useEffect, useMemo } from "react";
+import React, { useMemo } from "react";
+//MaterialUI
 import PropTypes from "prop-types";
 import { makeStyles, useTheme } from "@material-ui/core/styles";
 import AppBar from "@material-ui/core/AppBar";
@@ -14,7 +15,10 @@ import TableRow from "@material-ui/core/TableRow";
 import Paper from "@material-ui/core/Paper";
 import ArrowUpwardIcon from "@material-ui/icons/ArrowUpward";
 import AirplanemodeActiveIcon from "@material-ui/icons/AirplanemodeActive";
+//Date
 import Moment from "react-moment";
+//Redux
+import { connect } from "react-redux";
 
 function TabPanel(props) {
   const { children, value, index, ...other } = props;
@@ -56,7 +60,7 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-export default function Main({ сurrentData, arrival, сurrentDataName }) {
+function Main({ getArrivel, сurrentDataName, getCurrentData }) {
   const [value, setValue] = React.useState(0);
 
   const classes = useStyles();
@@ -67,31 +71,31 @@ export default function Main({ сurrentData, arrival, сurrentDataName }) {
     setValue(newValue);
   };
 
-  // const allDataConcat = arrival.concat(departure);
-
   // Check if name of arrival has in departure massive
   const arrivalCurrentData = useMemo(() =>
-    arrival.find((el) => el["airportFromID.name"] == сurrentDataName)
+    getArrivel.find((el) => el["airportFromID.name"] == сurrentDataName)
   );
 
-  // const arrivalCurrentData = allDataConcat.find(
-  //   (el) => el["airportFromID.name" || "airportToID.name"] == сurrentDataName
-  // );
-  // console.log("find result", arrivalCurrentData);
-
-  // Table head part
-  const TableHeadComponent = () => {
-    return (
-      <TableHead className="table-head">
-        <TableRow>
-          <TableCell>ЧАС</TableCell>
-          <TableCell>НАПРЯМОК</TableCell>
-          <TableCell>РЕЙС</TableCell>
-          <TableCell>КОМПАНІЯ</TableCell>
-          <TableCell>СТАТУС</TableCell>
-        </TableRow>
-      </TableHead>
-    );
+  //Status check
+  const statusCheck = (status) => {
+    switch (status) {
+      case "LN":
+        return "Прибув";
+      case "ON":
+        return "Вчасно";
+      case "DP":
+        return "Вилетів";
+      case "CK":
+        return "Реєстрація";
+      case "DK":
+        return "Вилетів";
+      case "GC":
+        return "Посадка";
+      case "FR":
+        return "В польоті";
+      default:
+        return status;
+    }
   };
 
   return (
@@ -124,21 +128,31 @@ export default function Main({ сurrentData, arrival, сurrentDataName }) {
       <TabPanel value={value} index={0} dir={theme.direction}>
         <TableContainer component={Paper}>
           <Table className={classes.table} aria-label="simple table">
-            <TableHeadComponent />
+            <TableHead className="table-head">
+              <TableRow>
+                <TableCell>ЧАС</TableCell>
+                <TableCell>НАПРЯМОК</TableCell>
+                <TableCell>РЕЙС</TableCell>
+                <TableCell>КОМПАНІЯ</TableCell>
+                <TableCell>СТАТУС</TableCell>
+              </TableRow>
+            </TableHead>
             <TableBody>
-              {сurrentData ? (
-                <TableRow key={сurrentData.ID}>
+              {Object.keys(getCurrentData).length != 0 ? (
+                <TableRow key={getCurrentData[0].ID}>
                   <TableCell scope="row">
-                    <Moment format="h:mm">{сurrentData.timeBoard}</Moment>
+                    <Moment format="h:mm">{getCurrentData[0].timeBoard}</Moment>
                   </TableCell>
                   <TableCell>
-                    {сurrentData["airportToID.name"]} (
-                    {сurrentData["airportToID.IATA"]})
+                    {getCurrentData[0]["airportToID.name"]} (
+                    {getCurrentData[0]["airportToID.IATA"]})
                   </TableCell>
                   <TableCell>
-                    {сurrentData["carrierID.IATA"]} {сurrentData.fltNo}
+                    {getCurrentData[0]["carrierID.IATA"]}{" "}
+                    {getCurrentData[0].fltNo}
                   </TableCell>
-                  <TableCell>{сurrentData.airline.ru.name}</TableCell>
+                  <TableCell>{getCurrentData[0].airline.ru.name}</TableCell>
+                  <TableCell>{statusCheck(getCurrentData[0].status)}</TableCell>
                 </TableRow>
               ) : (
                 <TableRow>
@@ -154,9 +168,17 @@ export default function Main({ сurrentData, arrival, сurrentDataName }) {
       <TabPanel value={value} index={1} dir={theme.direction}>
         <TableContainer component={Paper}>
           <Table className={classes.table} aria-label="simple table">
-            <TableHeadComponent />
+            <TableHead className="table-head">
+              <TableRow>
+                <TableCell>ЧАС</TableCell>
+                <TableCell>НАПРЯМОК</TableCell>
+                <TableCell>РЕЙС</TableCell>
+                <TableCell>КОМПАНІЯ</TableCell>
+                <TableCell>СТАТУС</TableCell>
+              </TableRow>
+            </TableHead>
             <TableBody>
-              {сurrentData ? (
+              {Object.keys(getCurrentData).length != 0 ? (
                 <TableRow>
                   <TableCell scope="row">
                     <Moment format="h:mm">
@@ -172,6 +194,9 @@ export default function Main({ сurrentData, arrival, сurrentDataName }) {
                     {arrivalCurrentData.fltNo}
                   </TableCell>
                   <TableCell>{arrivalCurrentData.airline.ru.name}</TableCell>
+                  <TableCell>
+                    {statusCheck(arrivalCurrentData.status)}
+                  </TableCell>
                 </TableRow>
               ) : (
                 <TableRow>
@@ -187,3 +212,12 @@ export default function Main({ сurrentData, arrival, сurrentDataName }) {
     </div>
   );
 }
+
+const mapStateToProps = (state) => {
+  return {
+    getArrivel: state.app.getArrivel,
+    getCurrentData: state.searchBar.items,
+  };
+};
+
+export default connect(mapStateToProps)(Main);

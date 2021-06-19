@@ -1,0 +1,7 @@
+export const SET_DATAS = "APP/SET_DATAS";
+export const SET_ARIVAL = "APP/SET_ARIVAL";
+export const SET_DEPARTURE = "APP/SET_DEPARTURE";
+export const SET_LOADED = "SET_LOADED";
+export const RESET_DATAS = "RESET_DATAS";
+export const SEARCH_BAR = "SEARCH/SEARCH_BAR";
+export const RESET_DATAS_SEARCH = "SEARCH/RESET_DATAS_SEARCH";

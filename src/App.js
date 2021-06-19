@@ -1,55 +1,32 @@
+import { React, useState, useEffect, forwardRef } from "react";
+import { Hero, SearchBar, Main } from "./components";
+// Material UI
 import { makeStyles } from "@material-ui/core/styles";
 import CircularProgress from "@material-ui/core/CircularProgress";
 import Button from "@material-ui/core/Button";
-
-import { React, useState, useEffect, forwardRef } from "react";
-import { Hero, SearchBar, Main } from "./components";
-import axios from "axios";
+//Date
 import DatePicker from "react-datepicker";
-
 import "react-datepicker/dist/react-datepicker.css";
+//Redux
+import { connect, useDispatch } from "react-redux";
+import { fetchDatas } from "./redux/actions/app";
 
-function App() {
-  const [allDatas, getAllDatas] = useState(null);
-  const [arrival, setArrival] = useState([]);
-  const [departure, setDeparture] = useState([]);
-  const [loading, setLoading] = useState(true);
+function App({ getDeparture, isLoading }) {
+  // Date change hooks
   const [startDate, setStartDate] = useState(new Date());
+  const date = startDate.toISOString().split("T")[0];
+
   // Main hooks
   const [сurrentDataName, setCurrentDataName] = useState(null);
 
   // Search hooks
   const [currentValue, setCurrentValue] = useState(null);
-  const [сurrentData, setCurrentData] = useState(null);
 
-  const date = startDate.toISOString().split("T")[0];
+  const dispatch = useDispatch();
 
   useEffect(() => {
-    async function fetchDataList() {
-      try {
-        const response = await axios(
-          `https://api.iev.aero/api/flights/${date}`
-        );
-        getAllDatas(response.data.body);
-        setArrival(response.data.body.arrival);
-        setDeparture(response.data.body.departure);
-        setLoading(false);
-      } catch (error) {
-        setLoading(null);
-        console.log(`error`, error);
-      }
-    }
-
-    fetchDataList();
+    dispatch(fetchDatas(date));
   }, [date]);
-
-  // console.log(`allDatas`, allDatas);
-  // console.log(`arrival`, arrival);
-  // console.log(`departure`, departure);
-  // console.log(`сurrentData`, сurrentData);
-  // console.log(`сurrentDataName`, сurrentDataName);
-  // console.log(`startDate`, date);
-  console.log(`currentValue`, currentValue);
 
   const useStyles = makeStyles((theme) => ({
     root: {
@@ -68,14 +45,10 @@ function App() {
   const clearSelected = (date) => {
     setStartDate(date);
     setCurrentValue(null);
-    setCurrentData(null);
-    setLoading(true);
   };
 
   // Check if departure object is empty
-  let departureLength = Object.keys(departure).length;
-
-  console.log("departurelLength", departureLength);
+  let departureLength = Object.keys(getDeparture).length;
 
   // Button element to react-datapicker
   const CustomInputData = forwardRef(({ value, onClick }, ref) => (
@@ -91,6 +64,7 @@ function App() {
       {value}
     </Button>
   ));
+
   // Data-picker element
   const DataElement = () => {
     return (
@@ -101,29 +75,34 @@ function App() {
           onChange={(date) => clearSelected(date)}
           dateFormat="MM/dd/yyyy"
         />
-        {departureLength != 0 ? "" : <span>На цю дату немає рейсів!</span>}
+        {departureLength != 0 ? (
+          ""
+        ) : (
+          <span>
+            На цю дату немає рейсів! <br />
+            Виберіть іншу дату!
+          </span>
+        )}
       </div>
     );
   };
+
+  console.log(`currentValue`, currentValue);
+
   return (
     <>
       <div className="App">
         <Hero />
 
-        {loading ? (
+        {isLoading ? (
           <div className={classes.root}>
             <CircularProgress />
           </div>
-        ) : loading === null ? (
+        ) : isLoading === null ? (
           <h1>Не знайдено рейсів</h1>
         ) : (
           <section className="main">
             <SearchBar
-              date={date}
-              allDatas={allDatas}
-              setCurrentData={setCurrentData}
-              departure={departure}
-              arrival={arrival}
               setCurrentDataName={setCurrentDataName}
               currentValue={currentValue}
               setCurrentValue={setCurrentValue}
@@ -131,11 +110,7 @@ function App() {
             />
             <DataElement />
 
-            <Main
-              arrival={arrival}
-              сurrentData={сurrentData}
-              сurrentDataName={сurrentDataName}
-            />
+            <Main сurrentDataName={сurrentDataName} />
           </section>
         )}
       </div>
@@ -146,4 +121,11 @@ function App() {
   );
 }
 
-export default App;
+const mapStateToProps = (state) => {
+  return {
+    getDeparture: state.app.getDeparture,
+    isLoading: state.app.setLoaded,
+  };
+};
+
+export default connect(mapStateToProps)(App);

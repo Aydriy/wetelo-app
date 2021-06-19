@@ -1,10 +1,13 @@
-/* eslint-disable no-use-before-define */
 import React from "react";
+//MaterialUI
 import Autocomplete from "@material-ui/lab/Autocomplete";
 import { makeStyles } from "@material-ui/core/styles";
 import Button from "@material-ui/core/Button";
 import Box from "@material-ui/core/Box";
 import SearchIcon from "@material-ui/icons/Search";
+//Redux
+import { connect, useDispatch } from "react-redux";
+import { searchBars } from "./../../redux/actions/searchBar";
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -18,19 +21,16 @@ const useStyles = makeStyles((theme) => ({
     marginBottom: "20px",
   },
 }));
-
-export default function SearchBar({
-  allDatas,
-  setCurrentData,
-  departure,
-  arrival,
+function SearchBar({
+  getAllDatas,
+  getDeparture,
   setCurrentDataName,
   currentValue,
   setCurrentValue,
   departureLength,
 }) {
   const classes = useStyles();
-  const allDataConcat = arrival.concat(departure);
+  const dispatch = useDispatch();
 
   // Autocomplete part with all props
   const AutocompleteElem = (props) => {
@@ -42,7 +42,6 @@ export default function SearchBar({
         freeSolo
         value={currentValue}
         onChange={(event, newValue) => {
-          console.log(newValue);
           if (newValue !== "") {
             setCurrentValue(newValue);
           } else {
@@ -56,7 +55,7 @@ export default function SearchBar({
             return `${option.fltNo}, ${option["airportFromID.name"]}`;
           }
         }}
-        options={departure}
+        options={getDeparture}
         renderInput={(params) => (
           <div
             className="search-input__input-container"
@@ -65,7 +64,7 @@ export default function SearchBar({
             <div className="search-icon">
               <SearchIcon />
             </div>
-            {allDatas ? (
+            {getAllDatas ? (
               <input
                 type="text"
                 placeholder="Номер рейсу або місто"
@@ -90,7 +89,7 @@ export default function SearchBar({
         className="search-input__btn"
         onClick={() => {
           if (currentValue != null) {
-            setCurrentData(currentValue);
+            dispatch(searchBars(currentValue));
             setCurrentDataName(() => {
               if (currentValue["airportToID.name"] == undefined) {
                 return currentValue["airportFromID.name"];
@@ -137,3 +136,12 @@ export default function SearchBar({
     </Box>
   );
 }
+
+const mapStateToProps = (state) => {
+  return {
+    getAllDatas: state.app.getAllDatas,
+    getDeparture: state.app.getDeparture,
+  };
+};
+
+export default connect(mapStateToProps)(SearchBar);
