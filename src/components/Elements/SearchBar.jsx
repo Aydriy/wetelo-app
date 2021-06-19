@@ -15,7 +15,6 @@ const useStyles = makeStyles((theme) => ({
     width: "100%",
     margin: "auto",
     boxShadow: "0px 2px 24px rgba(0, 0, 0, 0.04)",
-
     padding: 0,
     marginTop: "-35px",
     marginBottom: "20px",
@@ -109,7 +108,7 @@ function SearchBar({
 
   return (
     <Box
-      className={classes.root}
+      className="search-box"
       display="flex"
       p={1}
       justifyContent="space-between"

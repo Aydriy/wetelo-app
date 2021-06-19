@@ -87,8 +87,6 @@ function App({ getDeparture, isLoading }) {
     );
   };
 
-  console.log(`currentValue`, currentValue);
-
   return (
     <>
       <div className="App">

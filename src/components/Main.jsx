@@ -137,7 +137,7 @@ function Main({ getArrivel, сurrentDataName, getCurrentData }) {
                 <TableCell>СТАТУС</TableCell>
               </TableRow>
             </TableHead>
-            <TableBody>
+            <TableBody className="table-body">
               {Object.keys(getCurrentData).length != 0 ? (
                 <TableRow key={getCurrentData[0].ID}>
                   <TableCell scope="row">
@@ -177,7 +177,7 @@ function Main({ getArrivel, сurrentDataName, getCurrentData }) {
                 <TableCell>СТАТУС</TableCell>
               </TableRow>
             </TableHead>
-            <TableBody>
+            <TableBody className="table-body">
               {Object.keys(getCurrentData).length != 0 ? (
                 <TableRow>
                   <TableCell scope="row">
