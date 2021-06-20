@@ -7,6 +7,7 @@ import SearchIcon from "@material-ui/icons/Search";
 //Redux
 import { connect, useDispatch } from "react-redux";
 import { searchBars } from "./../../redux/actions/searchBar";
+import { setResetDatas } from "../../redux/actions/searchBar";
 
 function SearchBar({
   getAllDatas,
@@ -16,8 +17,10 @@ function SearchBar({
   setCurrentValue,
   departureLength,
 }) {
+  const [value, setValue] = React.useState(null);
   const dispatch = useDispatch();
 
+  console.log(`value`, value);
   // Autocomplete part with all props
   const AutocompleteElem = (props) => {
     return (
@@ -83,7 +86,7 @@ function SearchBar({
               }
             });
           } else {
-            return;
+            return dispatch(setResetDatas());
           }
         }}
       >

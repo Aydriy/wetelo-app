@@ -205,7 +205,8 @@ function Main({ getArrivel, сurrentDataName, getCurrentData, getDeparture }) {
             </TableBody>
           </Table>
         </TableContainer>
-        {Object.keys(getCurrentData).length !== 0 ? (
+        {Object.keys(getCurrentData).length !== 0 ||
+        Object.keys(getDeparture).length === 0 ? (
           ""
         ) : (
           <TablePagination
@@ -282,7 +283,8 @@ function Main({ getArrivel, сurrentDataName, getCurrentData, getDeparture }) {
             </TableBody>
           </Table>
         </TableContainer>
-        {Object.keys(getCurrentData).length !== 0 ? (
+        {Object.keys(getCurrentData).length !== 0 ||
+        Object.keys(getDeparture).length === 0 ? (
           ""
         ) : (
           <TablePagination
