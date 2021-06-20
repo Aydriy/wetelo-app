@@ -14,7 +14,7 @@ import TableHead from "@material-ui/core/TableHead";
 import TableRow from "@material-ui/core/TableRow";
 import Paper from "@material-ui/core/Paper";
 import ArrowUpwardIcon from "@material-ui/icons/ArrowUpward";
-import AirplanemodeActiveIcon from "@material-ui/icons/AirplanemodeActive";
+import TablePagination from "@material-ui/core/TablePagination";
 //Date
 import Moment from "react-moment";
 //Redux
@@ -60,11 +60,33 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-function Main({ getArrivel, сurrentDataName, getCurrentData }) {
+function Main({ getArrivel, сurrentDataName, getCurrentData, getDeparture }) {
   const [value, setValue] = React.useState(0);
-
+  //MaterialUI style
   const classes = useStyles();
   const theme = useTheme();
+  //Pagination arival
+  const [pageArrival, setPageArrival] = React.useState(0);
+  const [rowsPerPageArrival, setRowsPerPageArrival] = React.useState(5);
+
+  const handleChangePageArrival = (event, newPage) => {
+    setPageArrival(newPage);
+  };
+  const handleChangeRowsPerPageArrival = (event) => {
+    setRowsPerPageArrival(parseInt(event.target.value, 10));
+    setPageArrival(0);
+  };
+  //Pagination departure
+  const [pageDeparture, setPageDeparture] = React.useState(0);
+  const [rowsPerPageDeparture, setRowsPerPageDeparture] = React.useState(5);
+
+  const handleChangePageDeparture = (event, newPage) => {
+    setPageDeparture(newPage);
+  };
+  const handleChangeRowsPerPageDeparture = (event) => {
+    setRowsPerPageDeparture(parseInt(event.target.value, 10));
+    setPageDeparture(0);
+  };
 
   // Change tabs
   const handleChange = (event, newValue) => {
@@ -124,7 +146,6 @@ function Main({ getArrivel, сurrentDataName, getCurrentData }) {
           />
         </Tabs>
       </AppBar>
-
       <TabPanel value={value} index={0} dir={theme.direction}>
         <TableContainer component={Paper}>
           <Table className={classes.table} aria-label="simple table">
@@ -138,7 +159,7 @@ function Main({ getArrivel, сurrentDataName, getCurrentData }) {
               </TableRow>
             </TableHead>
             <TableBody className="table-body">
-              {Object.keys(getCurrentData).length != 0 ? (
+              {Object.keys(getCurrentData).length !== 0 ? (
                 <TableRow key={getCurrentData[0].ID}>
                   <TableCell scope="row">
                     <Moment format="h:mm">{getCurrentData[0].timeBoard}</Moment>
@@ -155,15 +176,48 @@ function Main({ getArrivel, сurrentDataName, getCurrentData }) {
                   <TableCell>{statusCheck(getCurrentData[0].status)}</TableCell>
                 </TableRow>
               ) : (
-                <TableRow>
-                  <TableCell>
-                    <AirplanemodeActiveIcon />
-                  </TableCell>
-                </TableRow>
+                <>
+                  {getDeparture
+                    .slice(
+                      pageDeparture * rowsPerPageDeparture,
+                      pageDeparture * rowsPerPageDeparture +
+                        rowsPerPageDeparture
+                    )
+                    .map((el) => {
+                      return (
+                        <TableRow key={el.ID}>
+                          <TableCell scope="row">
+                            <Moment format="h:mm">{el.timeBoard}</Moment>
+                          </TableCell>
+                          <TableCell>
+                            {el["airportToID.name"]} ({el["airportToID.IATA"]})
+                          </TableCell>
+                          <TableCell>
+                            {el["carrierID.IATA"]} {el.fltNo}
+                          </TableCell>
+                          <TableCell>{el.airline.ru.name}</TableCell>
+                          <TableCell>{statusCheck(el.status)}</TableCell>
+                        </TableRow>
+                      );
+                    })}
+                </>
               )}
             </TableBody>
           </Table>
         </TableContainer>
+        {Object.keys(getCurrentData).length !== 0 ? (
+          ""
+        ) : (
+          <TablePagination
+            rowsPerPageOptions={[5, 10, 25]}
+            component="div"
+            count={getDeparture.length}
+            rowsPerPage={rowsPerPageDeparture}
+            page={pageDeparture}
+            onChangePage={handleChangePageDeparture}
+            onChangeRowsPerPage={handleChangeRowsPerPageDeparture}
+          />
+        )}
       </TabPanel>
       <TabPanel value={value} index={1} dir={theme.direction}>
         <TableContainer component={Paper}>
@@ -178,7 +232,7 @@ function Main({ getArrivel, сurrentDataName, getCurrentData }) {
               </TableRow>
             </TableHead>
             <TableBody className="table-body">
-              {Object.keys(getCurrentData).length != 0 ? (
+              {Object.keys(getCurrentData).length !== 0 ? (
                 <TableRow>
                   <TableCell scope="row">
                     <Moment format="h:mm">
@@ -199,15 +253,48 @@ function Main({ getArrivel, сurrentDataName, getCurrentData }) {
                   </TableCell>
                 </TableRow>
               ) : (
-                <TableRow>
-                  <TableCell>
-                    <AirplanemodeActiveIcon />
-                  </TableCell>
-                </TableRow>
+                <>
+                  {getArrivel
+                    .slice(
+                      pageArrival * rowsPerPageArrival,
+                      pageArrival * rowsPerPageArrival + rowsPerPageArrival
+                    )
+                    .map((el) => {
+                      return (
+                        <TableRow key={el.ID}>
+                          <TableCell scope="row">
+                            <Moment format="h:mm">{el.timeLandCalc}</Moment>
+                          </TableCell>
+                          <TableCell>
+                            {el["airportFromID.name"]} (
+                            {el["airportFromID.IATA"]})
+                          </TableCell>
+                          <TableCell>
+                            {el["carrierID.IATA"]} {el.fltNo}
+                          </TableCell>
+                          <TableCell>{el.airline.ru.name}</TableCell>
+                          <TableCell>{statusCheck(el.status)}</TableCell>
+                        </TableRow>
+                      );
+                    })}
+                </>
               )}
             </TableBody>
           </Table>
         </TableContainer>
+        {Object.keys(getCurrentData).length !== 0 ? (
+          ""
+        ) : (
+          <TablePagination
+            rowsPerPageOptions={[5, 10, 25]}
+            component="div"
+            count={getArrivel.length}
+            rowsPerPage={rowsPerPageArrival}
+            page={pageArrival}
+            onChangePage={handleChangePageArrival}
+            onChangeRowsPerPage={handleChangeRowsPerPageArrival}
+          />
+        )}
       </TabPanel>
     </div>
   );
@@ -216,6 +303,7 @@ function Main({ getArrivel, сurrentDataName, getCurrentData }) {
 const mapStateToProps = (state) => {
   return {
     getArrivel: state.app.getArrivel,
+    getDeparture: state.app.getDeparture,
     getCurrentData: state.searchBar.items,
   };
 };

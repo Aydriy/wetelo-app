@@ -10,6 +10,7 @@ import "react-datepicker/dist/react-datepicker.css";
 //Redux
 import { connect, useDispatch } from "react-redux";
 import { fetchDatas } from "./redux/actions/app";
+import { setResetDatas } from "./redux/actions/searchBar";
 
 function App({ getDeparture, isLoading }) {
   // Date change hooks
@@ -45,6 +46,7 @@ function App({ getDeparture, isLoading }) {
   const clearSelected = (date) => {
     setStartDate(date);
     setCurrentValue(null);
+    dispatch(setResetDatas());
   };
 
   // Check if departure object is empty
@@ -54,7 +56,7 @@ function App({ getDeparture, isLoading }) {
   const CustomInputData = forwardRef(({ value, onClick }, ref) => (
     <Button
       className={`${
-        departureLength != 0 ? "data-button" : "data-button red-border"
+        departureLength !== 0 ? "data-button" : "data-button red-border"
       }`}
       variant="contained"
       color="primary"
@@ -75,7 +77,7 @@ function App({ getDeparture, isLoading }) {
           onChange={(date) => clearSelected(date)}
           dateFormat="MM/dd/yyyy"
         />
-        {departureLength != 0 ? (
+        {departureLength !== 0 ? (
           ""
         ) : (
           <span>

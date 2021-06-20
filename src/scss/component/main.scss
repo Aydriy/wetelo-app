@@ -106,7 +106,9 @@
     box-shadow: none;
   }
   .table-body {
-    height: 70px;
+    tr {
+      height: 70px;
+    }
   }
 
   .data-container {

@@ -1,7 +1,6 @@
 import React from "react";
 //MaterialUI
 import Autocomplete from "@material-ui/lab/Autocomplete";
-import { makeStyles } from "@material-ui/core/styles";
 import Button from "@material-ui/core/Button";
 import Box from "@material-ui/core/Box";
 import SearchIcon from "@material-ui/icons/Search";
@@ -9,17 +8,6 @@ import SearchIcon from "@material-ui/icons/Search";
 import { connect, useDispatch } from "react-redux";
 import { searchBars } from "./../../redux/actions/searchBar";
 
-const useStyles = makeStyles((theme) => ({
-  root: {
-    maxWidth: 750,
-    width: "100%",
-    margin: "auto",
-    boxShadow: "0px 2px 24px rgba(0, 0, 0, 0.04)",
-    padding: 0,
-    marginTop: "-35px",
-    marginBottom: "20px",
-  },
-}));
 function SearchBar({
   getAllDatas,
   getDeparture,
@@ -28,7 +16,6 @@ function SearchBar({
   setCurrentValue,
   departureLength,
 }) {
-  const classes = useStyles();
   const dispatch = useDispatch();
 
   // Autocomplete part with all props
@@ -38,7 +25,6 @@ function SearchBar({
         className={props.classname}
         id={props.id}
         disabled={props.disabled}
-        freeSolo
         value={currentValue}
         onChange={(event, newValue) => {
           if (newValue !== "") {
@@ -87,7 +73,7 @@ function SearchBar({
         disabled={props.disabled}
         className="search-input__btn"
         onClick={() => {
-          if (currentValue != null) {
+          if (currentValue !== null) {
             dispatch(searchBars(currentValue));
             setCurrentDataName(() => {
               if (currentValue["airportToID.name"] == undefined) {
@@ -113,7 +99,7 @@ function SearchBar({
       p={1}
       justifyContent="space-between"
     >
-      {departureLength != 0 ? (
+      {departureLength !== 0 ? (
         <>
           <AutocompleteElem
             disabled={false}
