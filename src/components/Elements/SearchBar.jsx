@@ -17,10 +17,8 @@ function SearchBar({
   setCurrentValue,
   departureLength,
 }) {
-  const [value, setValue] = React.useState(null);
   const dispatch = useDispatch();
 
-  console.log(`value`, value);
   // Autocomplete part with all props
   const AutocompleteElem = (props) => {
     return (
