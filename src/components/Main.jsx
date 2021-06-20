@@ -1,4 +1,4 @@
-import React, { useMemo } from "react";
+import React from "react";
 //MaterialUI
 import PropTypes from "prop-types";
 import { makeStyles, useTheme } from "@material-ui/core/styles";
@@ -94,8 +94,8 @@ function Main({ getArrivel, сurrentDataName, getCurrentData, getDeparture }) {
   };
 
   // Check if name of arrival has in departure massive
-  const arrivalCurrentData = useMemo(() =>
-    getArrivel.find((el) => el["airportFromID.name"] == сurrentDataName)
+  const arrivalCurrentData = getArrivel.find(
+    (el) => el["airportFromID.name"] == сurrentDataName
   );
 
   //Status check

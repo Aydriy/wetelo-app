@@ -2,7 +2,6 @@ import React from "react";
 import hero from "./Img/Hero.png";
 //
 import Typography from "@material-ui/core/Typography";
-import { makeStyles } from "@material-ui/core/styles";
 
 export default function Hero() {
   return (
